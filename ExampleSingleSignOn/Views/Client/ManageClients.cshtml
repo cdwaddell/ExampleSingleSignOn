@@ -1,0 +1,115 @@
+﻿@using ExampleSingleSignOn.Models.Client
+@model ClientViewModel[]
+
+@{
+    ViewBag.Title = "Manage Clients";
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Currently there are no registered clients</div>
+}
+else
+{
+    <div class="accordion" id="accordion" role="tablist" aria-multiselectable="false">
+        @foreach (var model in Model)
+        {
+            Html.RenderPartial("_Client.cshtml", model);
+        }
+    </div>
+}
+
+<div id="BlankTemplate" style="display: none">
+    @{
+        ClientViewModel blankClient = ViewBag.BlankClient;
+        Html.RenderPartial("_Client.cshtml", blankClient);
+    }
+</div>
+
+<div id="delete-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header warning-color">
+                <h5 class="modal-title">Confirm Client Delete</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this Client?</p>
+                <input type="hidden" id="delete-client-id" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirm-delete">Yes</button>
+                <button type="button" class="btn btn-secondary" id="dismiss-delete" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+		$(document).on("click", "#confirm-delete", function() {
+			$.ajax(
+				{
+					url: '@Url.RouteUrl("PostClient")/' + $("#delete-client-id").val(),
+					type: 'DELETE',
+					success: function() {
+						location.reload();
+					},
+					error: function() {
+						alert("An error occured");
+					}
+				}
+			);
+		});
+
+		$('#delete-modal').on('shown.bs.modal',
+			function (event) {
+				$("#delete-client-id").val($(event.relatedTarget).data("clientid"));
+				$('#dismiss-delete').focus();
+			}
+		);
+
+		$(function() {
+			var $blankTemplate = $("#BlankTemplate");
+			var registerArray = function(buttonSelector, classSelector) {
+				$(buttonSelector).click(function () {
+					$('.mdb-select').material_select('destroy');
+					var $element = $("." + classSelector, $blankTemplate).clone();
+					$element.removeClass(classSelector);
+					var $target = $(this);
+
+					var i = parseInt($target.data("maxid"));
+
+					$.each($element.find("*"),
+						function(index, input) {
+							var $input = $(input);
+							if ($input.prop) {
+								if ($input.prop("name"))
+									$input.prop("name", $input.prop("name").replace('0', i));
+								if ($input.prop("for"))
+									$input.prop("for", $input.prop("for").replace('0', i));
+								if ($input.prop("id"))
+									$input.prop("id", $input.prop("id").replace('0', i));
+							}
+						});
+
+					$target.data("maxid", i + 1);
+
+					$target.before($element);
+					$('.mdb-select').material_select();
+
+					return false;
+				});
+			};
+			registerArray('[name="AddGrant"]', "first-grant");
+			registerArray('[name="AddScope"]', "first-scope");
+			registerArray('[name="AddCors"]', "first-cor");
+			registerArray('[name="AddUri"]', "first-uri");
+			registerArray('[name="AddLogoutUri"]', "first-logout-uri");
+			registerArray('[name="AddClaim"]', "first-claim");
+			registerArray('[name="AddIdentity"]', "first-identity");
+		});
+    </script>
+}
+

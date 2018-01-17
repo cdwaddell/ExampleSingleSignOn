@@ -1,0 +1,316 @@
+﻿@using System.Text.RegularExpressions
+@using ExampleSingleSignOn.Models.Client
+@model ClientViewModel
+@{
+	var regex = new Regex("[^A-Za-z0-9 ]");
+	var id = string.IsNullOrWhiteSpace(Model.ClientId) ? 
+		"NewClient" : 
+		regex.Replace(Model.ClientId, "");
+	int i;
+}
+
+<div class="card">
+	<div class="card-header" role="tab" id="head@(id)">
+		<a data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="false" aria-controls="@id" class="collapsed">
+			<h2 class="mb-0">
+				<i class="fa fa-@(Model.Editable ? "un" : "")lock"></i>
+				@(string.IsNullOrWhiteSpace(Model.ClientId) ? "New Client" : Model.ClientId) 
+				<i class="fa fa-angle-down rotate-icon"></i>
+			</h2>
+		</a>
+	</div>
+	<div class="collapse" role="tabpanel" aria-labelledby="head@(id)" id="@id">
+		<div class="card-block">
+			<form asp-action="SaveClient" asp-controller="Client" method="post">
+				<fieldset @(Model.Editable?"": "disabled")>
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<fieldset class="form-group">@{ var controlId = Guid.NewGuid();}
+						<input id="@controlId" asp-for="Enabled" class="filled-in" />
+						<label for="@controlId" asp-for="Enabled"></label>
+					</fieldset>
+					<div class="md-form">
+						<input asp-for="ClientId" asp-is-readonly="@(!string.IsNullOrWhiteSpace(Model.ClientId))" class="form-control" />
+						<label asp-for="ClientId"></label>
+						<input type="hidden" asp-for="ProtocolType" />
+					</div>
+					<div class="md-form">
+						<input asp-for="ClientName" class="form-control" />
+						<label asp-for="ClientName"></label>
+						<span asp-validation-for="ClientName" class="text-danger"></span>
+					</div>
+					<div class="md-form">
+						<input asp-for="ClientUri" class="form-control" />
+						<label asp-for="ClientUri"></label>
+						<span asp-validation-for="ClientUri" class="text-danger"></span>
+					</div>
+					<div class="md-form">
+						<input asp-for="LogoUri" class="form-control" />
+						<label asp-for="LogoUri"></label>
+						<span asp-validation-for="LogoUri" class="text-danger"></span>
+					</div>
+					<div class="md-form">
+						<input asp-for="LogoutUri" class="form-control" />
+						<label asp-for="LogoutUri"></label>
+						<span asp-validation-for="LogoutUri" class="text-danger"></span>
+					</div>
+					<div class="md-form">
+						<select asp-for="RefreshTokenUsage" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.TokenUsage>()" class="mdb-select"></select>
+						<label asp-for="RefreshTokenUsage"></label>
+						<span asp-validation-for="RefreshTokenUsage" class="text-danger"></span>
+					</div>
+					<div class="md-form">
+						<select asp-for="RefreshTokenExpiration" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.TokenExpiration>()" class="mdb-select"></select>
+						<label asp-for="RefreshTokenExpiration"></label>
+						<span asp-validation-for="RefreshTokenExpiration" class="text-danger"></span>
+					</div>
+					<div class="md-form">
+						<select asp-for="AccessTokenType" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.AccessTokenType>()" class="mdb-select"></select>
+						<label asp-for="AccessTokenType"></label>
+						<span asp-validation-for="AccessTokenType" class="text-danger"></span>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="AllowedGrantTypes"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.AllowedGrantTypes.Count; i++)
+							{
+								<div class="md-form@(i==0?" first-grant": "")">
+									<select asp-for="AllowedGrantTypes[i]" asp-items="@(i == 0 && !string.IsNullOrWhiteSpace(Model.AllowedGrantTypes[i])?ViewBag.GrantTypesNoBlank:ViewBag.GrantTypes)" class="mdb-select" data-original="@Model.AllowedGrantTypes[i]"></select>
+								</div>
+							}
+							<button type="button" name="AddGrant" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Grant Type</button>
+							<div><span asp-validation-for="AllowedGrantTypes" class="text-danger"></span></div>
+						</div>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="AllowedScopes"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.AllowedScopes.Count; i++)
+							{
+								<div class="md-form@(i==0?" first-scope": "")">
+									<select asp-for="AllowedScopes[i]" asp-items="ViewBag.Scopes" class="mdb-select" data-original="@Model.AllowedScopes[i]"></select>
+								</div>
+							}
+							<button type="button" name="AddScope" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Scope</button>
+							<div><span asp-validation-for="AllowedScopes" class="text-danger"></span></div>
+						</div>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="AllowedCorsOrigins"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.AllowedCorsOrigins.Count; i++)
+							{
+								<div class="md-form@(i==0?" first-cor": "")">
+									<input asp-for="AllowedCorsOrigins[i]" class="form-control" />
+								</div>
+							}
+							<button type="button" name="AddCors" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Cors Origin</button>
+							<div><span asp-validation-for="AllowedCorsOrigins" class="text-danger"></span></div>
+						</div>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="RedirectUris"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.RedirectUris.Count; i++)
+							{
+								<div class="md-form@(i==0?" first-uri": "")">
+									<input asp-for="RedirectUris[i]" class="form-control" />
+								</div>
+							}
+							<button type="button" name="AddUri" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Redirect Url</button>
+							<div><span asp-validation-for="RedirectUris" class="text-danger"></span></div>
+						</div>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="PostLogoutRedirectUris"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.PostLogoutRedirectUris.Count; i++)
+							{
+								<div class="md-form@(i==0?" first-logout-uri": "")">
+									<input asp-for="PostLogoutRedirectUris[i]" class="form-control" />
+								</div>
+							}
+							<button type="button" name="AddLogoutUri" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Logout Url</button>
+							<div><span asp-validation-for="PostLogoutRedirectUris" class="text-danger"></span></div>
+						</div>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="Claims"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.Claims.Count; i++)
+							{
+								<div class="row@(i==0?" first-claim": "")">
+									<label asp-for="Claims[i].Type" class="col-xs-1 col-form-label"></label>
+									<div class="col-md-5">
+										<input asp-for="Claims[i].Type" class="form-control" />
+									</div>
+									<label asp-for="Claims[i].Value" class="col-xs-1 col-form-label"></label>
+									<div class="col-md-5">
+										<input asp-for="Claims[i].Value" class="form-control" />
+									</div>
+								</div>
+							}
+							<button type="button" name="AddClaim" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Claim</button>
+							<div><span asp-validation-for="Claims" class="text-danger"></span></div>
+						</div>
+					</div>
+					<div class="card">
+						<h3 class="card-header primary-color white-text"><label asp-for="IdentityProviderRestrictions"></label></h3>
+						<div class="card-block">
+							@for (i = 0; i < Model.IdentityProviderRestrictions.Count; i++)
+							{
+								<div class="md-form@(i==0?" first-identity": "")">
+									<input asp-for="IdentityProviderRestrictions[i]" class="form-control" />
+								</div>
+							}
+							<button type="button" name="AddIdentity" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Identity Restriction</button>
+							<div><span asp-validation-for="IdentityProviderRestrictions" class="text-danger"></span></div>
+						</div>
+					</div>
+					<br/><div class="row">
+						<div class="col-lg-4 col-md-6">
+							<div class="md-form">
+								<input asp-for="IdentityTokenLifetime" class="form-control" />
+								<label asp-for="IdentityTokenLifetime"></label>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="md-form">
+								<input asp-for="AccessTokenLifetime" class="form-control" />
+								<label asp-for="AccessTokenLifetime"></label>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="md-form">
+								<input asp-for="AuthorizationCodeLifetime" class="form-control" />
+								<label asp-for="AuthorizationCodeLifetime"></label>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="md-form">
+								<input asp-for="AbsoluteRefreshTokenLifetime" class="form-control" />
+								<label asp-for="AbsoluteRefreshTokenLifetime"></label>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="md-form">
+								<input asp-for="SlidingRefreshTokenLifetime" class="form-control" />
+								<label asp-for="SlidingRefreshTokenLifetime"></label>
+							</div>
+						</div>
+						<div>
+							<span asp-validation-for="IdentityTokenLifetime" class="text-danger"></span>
+							<span asp-validation-for="AccessTokenLifetime" class="text-danger"></span>
+							<span asp-validation-for="AuthorizationCodeLifetime" class="text-danger"></span>
+							<span asp-validation-for="AbsoluteRefreshTokenLifetime" class="text-danger"></span>
+							<span asp-validation-for="SlidingRefreshTokenLifetime" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId" asp-for="RequireClientSecret" class="filled-in" />
+								<label for="@controlId" asp-for="RequireClientSecret"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="RequireConsent" class="filled-in" />
+								<label for="@controlId" asp-for="RequireConsent"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="AllowRememberConsent" class="filled-in" />
+								<label for="@controlId" asp-for="AllowRememberConsent"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="RequirePkce" class="filled-in" />
+								<label for="@controlId" asp-for="RequirePkce"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="AllowPlainTextPkce" class="filled-in" />
+								<label for="@controlId" asp-for="AllowPlainTextPkce"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="AllowAccessTokensViaBrowser" class="filled-in" />
+								<label for="@controlId" asp-for="AllowAccessTokensViaBrowser"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="LogoutSessionRequired" class="filled-in" />
+								<label for="@controlId" asp-for="LogoutSessionRequired"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="AllowOfflineAccess" class="filled-in" />
+								<label for="@controlId" asp-for="AllowOfflineAccess"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="AlwaysIncludeUserClaimsInIdToken" class="filled-in" />
+								<label for="@controlId" asp-for="AlwaysIncludeUserClaimsInIdToken"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="UpdateAccessTokenClaimsOnRefresh" class="filled-in" />
+								<label for="@controlId" asp-for="UpdateAccessTokenClaimsOnRefresh"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="EnableLocalLogin" class="filled-in" />
+								<label for="@controlId" asp-for="EnableLocalLogin"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="IncludeJwtId" class="filled-in" />
+								<label for="@controlId" asp-for="IncludeJwtId"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="AlwaysSendClientClaims" class="filled-in" />
+								<label for="@controlId" asp-for="AlwaysSendClientClaims"></label>
+							</fieldset>
+						</div>
+						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
+							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
+								<input id="@controlId"  asp-for="PrefixClientClaims" class="filled-in" />
+								<label for="@controlId" asp-for="PrefixClientClaims"></label>
+							</fieldset>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="alert alert-danger" style="@(string.IsNullOrWhiteSpace(Model.ClientId)?"display:none":"")">If you set this, your existing secrets will be expired in 30 days</div>
+						<label asp-for="ClientSecret" class="col-md-2 col-form-label"></label>
+						<div class="col-md-10">
+							<input asp-for="ClientSecret" class="form-control" />
+							<span asp-validation-for="ClientSecret" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="offset-sm-8 col-sm-4">
+							<div>
+								<button type="button" @(Model.Editable ? "" : "disabled") class="btn btn-danger btn-primary" style="@(string.IsNullOrWhiteSpace(Model.ClientId) ? "display:none" : "")" data-clientid="@Model.ClientId" data-toggle="modal" data-target="#delete-modal">
+									<i class="fa fa-remove"></i> Delete
+								</button>
+								<button type="submit" class="btn btn-primary">Save</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
