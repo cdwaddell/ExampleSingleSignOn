@@ -137,7 +137,7 @@ namespace ExampleSingleSignOn
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ManageClients", policy =>
+                options.AddPolicy(Policies.ManageClients, policy =>
                     policy.Requirements.Add(new RolesAuthorizationRequirement(new []{"Admin"})));
             });
 

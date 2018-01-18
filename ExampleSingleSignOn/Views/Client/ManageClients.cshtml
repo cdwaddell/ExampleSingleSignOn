@@ -29,7 +29,7 @@ else
 <div id="delete-modal" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header warning-color">
+            <div class="modal-header">
                 <h5 class="modal-title">Confirm Client Delete</h5>
             </div>
             <div class="modal-body">
@@ -70,11 +70,11 @@ else
 			}
 		);
 
-		$(function() {
+        $(function () {
+            $("#accordion .collapse").first().collapse('toggle');
 			var $blankTemplate = $("#BlankTemplate");
 			var registerArray = function(buttonSelector, classSelector) {
 				$(buttonSelector).click(function () {
-					$('.mdb-select').material_select('destroy');
 					var $element = $("." + classSelector, $blankTemplate).clone();
 					$element.removeClass(classSelector);
 					var $target = $(this);
@@ -97,7 +97,6 @@ else
 					$target.data("maxid", i + 1);
 
 					$target.before($element);
-					$('.mdb-select').material_select();
 
 					return false;
 				});

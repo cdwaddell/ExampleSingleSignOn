@@ -25,47 +25,47 @@
 				<fieldset @(Model.Editable?"": "disabled")>
 					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 					<fieldset class="form-group">@{ var controlId = Guid.NewGuid();}
-						<input id="@controlId" asp-for="Enabled" class="filled-in" />
 						<label for="@controlId" asp-for="Enabled"></label>
+						<input id="@controlId" asp-for="Enabled" />
 					</fieldset>
-					<div class="md-form">
+					<div class="form-group">
+					    <label asp-for="ClientId"></label>
 						<input asp-for="ClientId" asp-is-readonly="@(!string.IsNullOrWhiteSpace(Model.ClientId))" class="form-control" />
-						<label asp-for="ClientId"></label>
 						<input type="hidden" asp-for="ProtocolType" />
 					</div>
-					<div class="md-form">
+					<div class="form-group">
+					    <label asp-for="ClientName"></label>
 						<input asp-for="ClientName" class="form-control" />
-						<label asp-for="ClientName"></label>
 						<span asp-validation-for="ClientName" class="text-danger"></span>
 					</div>
-					<div class="md-form">
+					<div class="form-group">
+					    <label asp-for="ClientUri"></label>
 						<input asp-for="ClientUri" class="form-control" />
-						<label asp-for="ClientUri"></label>
 						<span asp-validation-for="ClientUri" class="text-danger"></span>
 					</div>
-					<div class="md-form">
+					<div class="form-group">
+					    <label asp-for="LogoUri"></label>
 						<input asp-for="LogoUri" class="form-control" />
-						<label asp-for="LogoUri"></label>
 						<span asp-validation-for="LogoUri" class="text-danger"></span>
 					</div>
-					<div class="md-form">
+					<div class="form-group">
+					    <label asp-for="LogoutUri"></label>
 						<input asp-for="LogoutUri" class="form-control" />
-						<label asp-for="LogoutUri"></label>
 						<span asp-validation-for="LogoutUri" class="text-danger"></span>
 					</div>
-					<div class="md-form">
-						<select asp-for="RefreshTokenUsage" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.TokenUsage>()" class="mdb-select"></select>
-						<label asp-for="RefreshTokenUsage"></label>
+					<div class="form-group">
+					    <label asp-for="RefreshTokenUsage"></label>
+						<select asp-for="RefreshTokenUsage" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.TokenUsage>()" class="form-control"></select>
 						<span asp-validation-for="RefreshTokenUsage" class="text-danger"></span>
 					</div>
-					<div class="md-form">
-						<select asp-for="RefreshTokenExpiration" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.TokenExpiration>()" class="mdb-select"></select>
-						<label asp-for="RefreshTokenExpiration"></label>
+					<div class="form-group">
+					    <label asp-for="RefreshTokenExpiration"></label>
+						<select asp-for="RefreshTokenExpiration" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.TokenExpiration>()" class="form-control"></select>
 						<span asp-validation-for="RefreshTokenExpiration" class="text-danger"></span>
 					</div>
-					<div class="md-form">
-						<select asp-for="AccessTokenType" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.AccessTokenType>()" class="mdb-select"></select>
-						<label asp-for="AccessTokenType"></label>
+					<div class="form-group">
+					    <label asp-for="AccessTokenType"></label>
+						<select asp-for="AccessTokenType" asp-items="@Html.GetEnumSelectList<IdentityServer4.Models.AccessTokenType>()" class="form-control"></select>
 						<span asp-validation-for="AccessTokenType" class="text-danger"></span>
 					</div>
 					<div class="card">
@@ -73,11 +73,11 @@
 						<div class="card-block">
 							@for (i = 0; i < Model.AllowedGrantTypes.Count; i++)
 							{
-								<div class="md-form@(i==0?" first-grant": "")">
-									<select asp-for="AllowedGrantTypes[i]" asp-items="@(i == 0 && !string.IsNullOrWhiteSpace(Model.AllowedGrantTypes[i])?ViewBag.GrantTypesNoBlank:ViewBag.GrantTypes)" class="mdb-select" data-original="@Model.AllowedGrantTypes[i]"></select>
+								<div class="form-group@(i==0?" first-grant": "")">
+									<select asp-for="AllowedGrantTypes[i]" asp-items="@(i == 0 && !string.IsNullOrWhiteSpace(Model.AllowedGrantTypes[i])?ViewBag.GrantTypesNoBlank:ViewBag.GrantTypes)" class="form-control" data-original="@Model.AllowedGrantTypes[i]"></select>
 								</div>
 							}
-							<button type="button" name="AddGrant" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Grant Type</button>
+							<button type="button" name="AddGrant" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Grant Type</button>
 							<div><span asp-validation-for="AllowedGrantTypes" class="text-danger"></span></div>
 						</div>
 					</div>
@@ -86,11 +86,11 @@
 						<div class="card-block">
 							@for (i = 0; i < Model.AllowedScopes.Count; i++)
 							{
-								<div class="md-form@(i==0?" first-scope": "")">
-									<select asp-for="AllowedScopes[i]" asp-items="ViewBag.Scopes" class="mdb-select" data-original="@Model.AllowedScopes[i]"></select>
+								<div class="form-group@(i==0?" first-scope": "")">
+									<select asp-for="AllowedScopes[i]" asp-items="ViewBag.Scopes" class="form-control" data-original="@Model.AllowedScopes[i]"></select>
 								</div>
 							}
-							<button type="button" name="AddScope" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Scope</button>
+							<button type="button" name="AddScope" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Scope</button>
 							<div><span asp-validation-for="AllowedScopes" class="text-danger"></span></div>
 						</div>
 					</div>
@@ -99,11 +99,11 @@
 						<div class="card-block">
 							@for (i = 0; i < Model.AllowedCorsOrigins.Count; i++)
 							{
-								<div class="md-form@(i==0?" first-cor": "")">
+								<div class="form-group@(i==0?" first-cor": "")">
 									<input asp-for="AllowedCorsOrigins[i]" class="form-control" />
 								</div>
 							}
-							<button type="button" name="AddCors" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Cors Origin</button>
+							<button type="button" name="AddCors" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Cors Origin</button>
 							<div><span asp-validation-for="AllowedCorsOrigins" class="text-danger"></span></div>
 						</div>
 					</div>
@@ -112,11 +112,11 @@
 						<div class="card-block">
 							@for (i = 0; i < Model.RedirectUris.Count; i++)
 							{
-								<div class="md-form@(i==0?" first-uri": "")">
+								<div class="form-group@(i==0?" first-uri": "")">
 									<input asp-for="RedirectUris[i]" class="form-control" />
 								</div>
 							}
-							<button type="button" name="AddUri" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Redirect Url</button>
+							<button type="button" name="AddUri" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Redirect Url</button>
 							<div><span asp-validation-for="RedirectUris" class="text-danger"></span></div>
 						</div>
 					</div>
@@ -125,11 +125,11 @@
 						<div class="card-block">
 							@for (i = 0; i < Model.PostLogoutRedirectUris.Count; i++)
 							{
-								<div class="md-form@(i==0?" first-logout-uri": "")">
+								<div class="form-group@(i==0?" first-logout-uri": "")">
 									<input asp-for="PostLogoutRedirectUris[i]" class="form-control" />
 								</div>
 							}
-							<button type="button" name="AddLogoutUri" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Logout Url</button>
+							<button type="button" name="AddLogoutUri" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Logout Url</button>
 							<div><span asp-validation-for="PostLogoutRedirectUris" class="text-danger"></span></div>
 						</div>
 					</div>
@@ -139,17 +139,17 @@
 							@for (i = 0; i < Model.Claims.Count; i++)
 							{
 								<div class="row@(i==0?" first-claim": "")">
-									<label asp-for="Claims[i].Type" class="col-xs-1 col-form-label"></label>
+									<label asp-for="Claims[i].Type" class="col-xs-1"></label>
 									<div class="col-md-5">
 										<input asp-for="Claims[i].Type" class="form-control" />
 									</div>
-									<label asp-for="Claims[i].Value" class="col-xs-1 col-form-label"></label>
+									<label asp-for="Claims[i].Value" class="col-xs-1"></label>
 									<div class="col-md-5">
 										<input asp-for="Claims[i].Value" class="form-control" />
 									</div>
 								</div>
 							}
-							<button type="button" name="AddClaim" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Claim</button>
+							<button type="button" name="AddClaim" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Claim</button>
 							<div><span asp-validation-for="Claims" class="text-danger"></span></div>
 						</div>
 					</div>
@@ -158,43 +158,43 @@
 						<div class="card-block">
 							@for (i = 0; i < Model.IdentityProviderRestrictions.Count; i++)
 							{
-								<div class="md-form@(i==0?" first-identity": "")">
+								<div class="form-group@(i==0?" first-identity": "")">
 									<input asp-for="IdentityProviderRestrictions[i]" class="form-control" />
 								</div>
 							}
-							<button type="button" name="AddIdentity" class="btn btn-block btn-blue-grey" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Identity Restriction</button>
+							<button type="button" name="AddIdentity" class="btn btn-block" data-maxid="@i"><i class="fa fa-plus-circle"></i> Add Identity Restriction</button>
 							<div><span asp-validation-for="IdentityProviderRestrictions" class="text-danger"></span></div>
 						</div>
 					</div>
 					<br/><div class="row">
 						<div class="col-lg-4 col-md-6">
-							<div class="md-form">
+							<div class="form-group">
+							    <label asp-for="IdentityTokenLifetime"></label>
 								<input asp-for="IdentityTokenLifetime" class="form-control" />
-								<label asp-for="IdentityTokenLifetime"></label>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-6">
-							<div class="md-form">
+							<div class="form-group">
+							    <label asp-for="AccessTokenLifetime"></label>
 								<input asp-for="AccessTokenLifetime" class="form-control" />
-								<label asp-for="AccessTokenLifetime"></label>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-6">
-							<div class="md-form">
+							<div class="form-group">
+							    <label asp-for="AuthorizationCodeLifetime"></label>
 								<input asp-for="AuthorizationCodeLifetime" class="form-control" />
-								<label asp-for="AuthorizationCodeLifetime"></label>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-6">
-							<div class="md-form">
+							<div class="form-group">
+							    <label asp-for="AbsoluteRefreshTokenLifetime"></label>
 								<input asp-for="AbsoluteRefreshTokenLifetime" class="form-control" />
-								<label asp-for="AbsoluteRefreshTokenLifetime"></label>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-6">
-							<div class="md-form">
+							<div class="form-group">
+							    <label asp-for="SlidingRefreshTokenLifetime"></label>
 								<input asp-for="SlidingRefreshTokenLifetime" class="form-control" />
-								<label asp-for="SlidingRefreshTokenLifetime"></label>
 							</div>
 						</div>
 						<div>
@@ -208,86 +208,86 @@
 					<div class="row">
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId" asp-for="RequireClientSecret" class="filled-in" />
-								<label for="@controlId" asp-for="RequireClientSecret"></label>
+							    <label for="@controlId" asp-for="RequireClientSecret"></label>
+								<input id="@controlId" asp-for="RequireClientSecret" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="RequireConsent" class="filled-in" />
-								<label for="@controlId" asp-for="RequireConsent"></label>
+							    <label for="@controlId" asp-for="RequireConsent"></label>
+								<input id="@controlId"  asp-for="RequireConsent" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="AllowRememberConsent" class="filled-in" />
-								<label for="@controlId" asp-for="AllowRememberConsent"></label>
+							    <label for="@controlId" asp-for="AllowRememberConsent"></label>
+								<input id="@controlId"  asp-for="AllowRememberConsent" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="RequirePkce" class="filled-in" />
-								<label for="@controlId" asp-for="RequirePkce"></label>
+							    <label for="@controlId" asp-for="RequirePkce"></label>
+								<input id="@controlId"  asp-for="RequirePkce" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="AllowPlainTextPkce" class="filled-in" />
-								<label for="@controlId" asp-for="AllowPlainTextPkce"></label>
+							    <label for="@controlId" asp-for="AllowPlainTextPkce"></label>
+								<input id="@controlId"  asp-for="AllowPlainTextPkce" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="AllowAccessTokensViaBrowser" class="filled-in" />
-								<label for="@controlId" asp-for="AllowAccessTokensViaBrowser"></label>
+							    <label for="@controlId" asp-for="AllowAccessTokensViaBrowser"></label>
+								<input id="@controlId"  asp-for="AllowAccessTokensViaBrowser" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="LogoutSessionRequired" class="filled-in" />
-								<label for="@controlId" asp-for="LogoutSessionRequired"></label>
+							    <label for="@controlId" asp-for="LogoutSessionRequired"></label>
+								<input id="@controlId"  asp-for="LogoutSessionRequired" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="AllowOfflineAccess" class="filled-in" />
-								<label for="@controlId" asp-for="AllowOfflineAccess"></label>
+							    <label for="@controlId" asp-for="AllowOfflineAccess"></label>
+								<input id="@controlId"  asp-for="AllowOfflineAccess" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="AlwaysIncludeUserClaimsInIdToken" class="filled-in" />
-								<label for="@controlId" asp-for="AlwaysIncludeUserClaimsInIdToken"></label>
+							    <label for="@controlId" asp-for="AlwaysIncludeUserClaimsInIdToken"></label>
+								<input id="@controlId"  asp-for="AlwaysIncludeUserClaimsInIdToken" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="UpdateAccessTokenClaimsOnRefresh" class="filled-in" />
-								<label for="@controlId" asp-for="UpdateAccessTokenClaimsOnRefresh"></label>
+							    <label for="@controlId" asp-for="UpdateAccessTokenClaimsOnRefresh"></label>
+								<input id="@controlId"  asp-for="UpdateAccessTokenClaimsOnRefresh" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="EnableLocalLogin" class="filled-in" />
-								<label for="@controlId" asp-for="EnableLocalLogin"></label>
+							    <label for="@controlId" asp-for="EnableLocalLogin"></label>
+								<input id="@controlId"  asp-for="EnableLocalLogin" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="IncludeJwtId" class="filled-in" />
-								<label for="@controlId" asp-for="IncludeJwtId"></label>
+							    <label for="@controlId" asp-for="IncludeJwtId"></label>
+								<input id="@controlId"  asp-for="IncludeJwtId" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="AlwaysSendClientClaims" class="filled-in" />
-								<label for="@controlId" asp-for="AlwaysSendClientClaims"></label>
+							    <label for="@controlId" asp-for="AlwaysSendClientClaims"></label>
+								<input id="@controlId"  asp-for="AlwaysSendClientClaims" />
 							</fieldset>
 						</div>
 						<div class="col-md-6 col-lg-4 col-xl-3 text-xs-center">
 							<fieldset class="form-group">@{ controlId = Guid.NewGuid();}
-								<input id="@controlId"  asp-for="PrefixClientClaims" class="filled-in" />
-								<label for="@controlId" asp-for="PrefixClientClaims"></label>
+							    <label for="@controlId" asp-for="PrefixClientClaims"></label>
+								<input id="@controlId"  asp-for="PrefixClientClaims" />
 							</fieldset>
 						</div>
 					</div>

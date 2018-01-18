@@ -1,0 +1,22 @@
+﻿@using ExampleSingleSignOn.Models.Client
+@model ScopeViewModel[]
+@{
+    ScopeType scopeType = ViewBag.ScopeType;
+}
+<ul class="list-group">
+    <li class="list-group-item"><h3>@scopeType.ToString() Scopes:</h3></li>
+    @if (!Model.Any())
+    {
+        <li class="list-group-item"><i>no @scopeType.ToString() scopes found</i></li>
+    }
+    @foreach (var scope in Model)
+    {
+        @Html.Partial("_Scope", scope);
+    }
+    <li class="list-group-item">
+        <form asp-action="SaveScope" asp-controller="Client" method="post" asp-route-parent="@ViewBag.Parent">
+            <input type="hidden" name="ScopeType" value="@scopeType" />
+            Add @scopeType.ToString() Scope <input type="text" name="ScopeName" /><button type="submit"><i class="fa fa-plus-circle"></i></button>
+        </form>
+    </li>
+</ul>
